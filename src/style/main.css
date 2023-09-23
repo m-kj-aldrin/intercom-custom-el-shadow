@@ -28,3 +28,14 @@ body {
     --color-black: 0 0% 5%;
     --color-white: 0 0% 97.5%;
 }
+
+::-webkit-scrollbar {
+    background: transparent;
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: hsl(var(--color-primary));
+    border-radius: 8px;
+}

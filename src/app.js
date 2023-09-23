@@ -1,3 +1,4 @@
+import "./interact/menu.js";
 import { dragZone, draggable } from "./interact/drag.js";
 
 document.body.addEventListener("com:bus:context", (e) => {
@@ -48,6 +49,10 @@ export class Base extends HTMLElement {
     }
 
     connectedCallback() {
+        if (this.hasAttribute("silent")) {
+            this.removeAttribute("silent");
+            return;
+        }
         this.emitContext("connected");
     }
 
@@ -85,11 +90,30 @@ export class COMNetwork extends Base {
     constructor() {
         super();
     }
+
+    addChain() {
+        const c = document.createElement("com-chain");
+        this.appendChild(c);
+    }
 }
 
 export class COMChain extends Base {
     constructor() {
         super();
+    }
+
+    /**
+     *
+     * @param {string} type
+     * @param {boolean} silent
+     */
+    addModule(type, silent = false) {
+        const m = document.createElement("com-module");
+        m.setAttribute("type", type);
+        if (silent) {
+            m.setAttribute("silent", "");
+        }
+        this.appendChild(m);
     }
 
     connectedCallback() {
@@ -165,20 +189,8 @@ export class COMParameter extends Base {
         });
     }
 
-    // get signature() {
-    //     let type = "";
-
-    //     type = this.getAttribute("type") ?? "PTH";
-
-    //     return {
-    //         type,
-    //     };
-    // }
-
     connectedCallback() {
         super.connectedCallback();
-
-        // const sig = this.signature;
 
         if (!this._init) {
             const name = this.getAttribute("name");
@@ -219,3 +231,20 @@ customElements.define("com-chain", COMChain);
 customElements.define("com-module", COMModule);
 customElements.define("com-parameter", COMParameter);
 customElements.define("com-out", COMOut);
+
+document.body.innerHTML += `
+<com-network silent>
+    ${`
+    <com-chain silent>
+        ${`
+        <com-module type="LFO" silent></com-module>
+        <com-module type="CHA" silent></com-module>
+        <com-module silent>
+            <com-out slot="outs" silent></com-out>
+            <com-out slot="outs" silent></com-out>
+        </com-module>
+            `.repeat(2)}
+    </com-chain>
+        `.repeat(8)}
+</com-network>
+`;

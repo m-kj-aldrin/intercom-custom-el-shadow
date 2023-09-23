@@ -1,4 +1,4 @@
-import { Chain, Module } from "../elements/base.js";
+import { COMChain, COMModule, COMNetwork } from "../app.js";
 
 /**
  *
@@ -8,13 +8,23 @@ function actionClick(e) {
     const meta = e.metaKey;
     const alt = e.altKey;
 
-    /**@type {Chain | Module | null} */
-    const target = e.target.closest("com-chain,com-module");
+    /**@type {COMChain | COMModule | COMNetwork | null} */
+    const target = e.target.closest("com-network,com-chain,com-module");
 
     if (!target) return;
 
-    if (alt) {
+    if (alt && !(target instanceof COMNetwork)) {
         target.remove();
+    }
+
+    if (meta) {
+        if (target instanceof COMChain) {
+            target.addModule("LFO");
+        }
+
+        if (target instanceof COMNetwork) {
+            target.addChain();
+        }
     }
 }
 

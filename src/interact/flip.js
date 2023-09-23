@@ -29,7 +29,6 @@ export default function (elements) {
 
             o.element.animate(keyFrames, {
                 duration: 100,
-                fill: "both",
                 composite: "add",
                 easing: "ease",
             });

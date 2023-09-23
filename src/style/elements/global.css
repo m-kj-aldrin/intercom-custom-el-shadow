@@ -1,0 +1,24 @@
+:host {
+    display: flex;
+    flex-direction: column;
+
+    border: 1px currentColor solid;
+    border-radius: 2px;
+
+    padding: 2px;
+}
+
+button {
+    font-family: inherit;
+    color: currentColor;
+    background-color: transparent;
+    border-style: solid;
+    border-radius: 1px;
+    border-color: currentColor;
+    border-width: 1px;
+}
+
+button:hover {
+    background-color: black;
+    color: white;
+}

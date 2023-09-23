@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>shadow</title>
+        <script src="./src/app.js" type="module"></script>
+        <link rel="stylesheet" href="src/style/reset.css" />
+        <link rel="stylesheet" href="src/style/main.css" />
+    </head>
+
+    <body>
+        <!-- - - BASE -->
+
+        <template id="template-BASE">
+            <style>
+                :host {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 2px;
+
+                    padding: 2px;
+
+                    background-color: hsl(var(--color-white));
+
+                    border: 1px hsl(var(--color-black) / 0.1) solid;
+                    border-radius: 2px;
+                }
+            </style>
+        </template>
+
+        <!-- - - LIST -->
+
+        <template id="template-COM-LIST">
+            <style>
+                :host {
+                    flex-grow: 1;
+                }
+            </style>
+            <slot></slot>
+        </template>
+
+        <!-- - - NETWORK -->
+
+        <template id="template-COM-NETWORK">
+            <style>
+                :host {
+                    flex-grow: 1;
+                }
+                com-list {
+                    flex-direction: row;
+                }
+            </style>
+            <com-list>
+                <slot></slot>
+            </com-list>
+        </template>
+
+        <!-- - - CHAIN -->
+
+        <template id="template-COM-CHAIN">
+            <style>
+                :host {
+                }
+                com-list {
+                    background-color: hsl(var(--color-primary) / 0.1);
+                }
+            </style>
+            <com-list>
+                <slot></slot>
+            </com-list>
+        </template>
+
+        <!-- - - MODULE -->
+
+        <template id="template-COM-MODULE">
+            <style>
+                :host {
+                }
+                com-list.outs {
+                    border: none;
+                    flex-direction: row;
+                    background-color: hsl(var(--color-primary) / 0.1);
+                    padding: 0;
+                    gap: 0;
+                }
+                com-list.parameters {
+                    padding: 0;
+                }
+                ::slotted(com-out) {
+                    margin: 2px;
+                }
+            </style>
+            <slot name="type"></slot>
+            <com-list class="parameters">
+                <slot name="parameters"></slot>
+            </com-list>
+            <com-list class="outs">
+                <slot name="outs"></slot>
+            </com-list>
+        </template>
+
+        <!-- - - PARAMETER -->
+
+        <template id="template-COM-PARAMETER">
+            <style>
+                :host {
+                    border: none;
+                }
+                com-list {
+                    border: none;
+                    flex-direction: row;
+                    justify-content: space-between;
+                }
+                ::slotted(input) {
+                    color: currentColor;
+                    background-color: hsl(var(--color-white));
+                    border: none;
+                    border-bottom: 1px currentColor solid;
+                    width: 6ch;
+                }
+            </style>
+            <com-list>
+                <slot name="name"></slot>
+                <slot></slot>
+            </com-list>
+        </template>
+
+        <!-- - - OUT -->
+
+        <template id="template-COM-OUT">
+            <style>
+                :host {
+                    flex-direction: row;
+                    align-items: center;
+                }
+                span {
+                    min-width: 24px;
+                    aspect-ratio: 1/1;
+
+                    font-size: 1.25em;
+
+                    display: grid;
+                    place-content: center;
+                }
+                com-list {
+                    border: none;
+                    flex-shrink: 1;
+                    flex-basis: 0;
+                    flex-grow: 0;
+                }
+                select {
+                    color: currentColor;
+                    font-size: 0.5em;
+                    /* font-size: inherit; */
+                    appearance: none;
+                    border: none;
+                    border-radius: 0;
+                    border-bottom: 1px currentColor solid;
+                    background-color: hsl(var(--color-white));
+                    width: max-content;
+                }
+            </style>
+
+            <span>&DownTeeArrow;</span>
+
+            <com-list>
+                <select name="pid">
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                </select>
+                <select name="ch">
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                </select>
+            </com-list>
+        </template>
+
+        <com-network>
+            <com-chain>
+                <com-module type="LFO"></com-module>
+                <com-module type="CHA"></com-module>
+                <com-module>
+                    <com-out slot="outs"></com-out>
+                    <com-out slot="outs"></com-out>
+                </com-module>
+            </com-chain>
+            <com-chain></com-chain>
+        </com-network>
+    </body>
+</html>

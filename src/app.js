@@ -333,6 +333,8 @@ document.body.innerHTML += `
         <com-module silent>
             <com-out slot="outs" silent></com-out>
             <com-out slot="outs" silent></com-out>
+            <com-out slot="outs" silent></com-out>
+            <com-out slot="outs" silent></com-out>
         </com-module>
             `.repeat(1)}
     </com-chain>

@@ -21,7 +21,7 @@
                     gap: 2px;
                     padding: 2px;
 
-                    --bg-opacity: 0.3;
+                    --bg-opacity: 0.2;
 
                     background-color: hsl(var(--color-white));
                     color: hsl(var(--color));
@@ -84,20 +84,32 @@
 
         <template id="template-COM-CHAIN">
             <style>
+                :host {
+                    position: relative;
+                }
+                .periphial::after {
+                    content: "";
+                    width: 95%;
+                    border-bottom: inherit;
+                    border-bottom-style: dashed;
+                    margin-inline: auto;
+                    margin-block: 2px;
+                }
                 com-list.periphial {
+                    display: none;
                     flex-grow: 0;
-                    justify-content: space-between;
-                    align-items: center;
                     font-size: 0.65rem;
                 }
                 span {
                     font-family: monospace;
-                    font-size: 1rem;
+                    font-size: 0.75rem;
+                    padding-inline: 0.5ch;
                 }
             </style>
-            <com-list class="periphial" row>
+
+            <com-list class="periphial" part="p-list">
                 <com-periphial>CV</com-periphial>
-                <span>&hookrightarrow;</span>
+                <!-- <span>&hookrightarrow;</span> -->
                 <com-periphial>GT</com-periphial>
             </com-list>
             <com-list class="modules" part="modules">
@@ -120,14 +132,17 @@
 
                 com-list.outs {
                     border: none;
-                    flex-direction: row;
+                    /* flex-wrap: wrap; */
+                    align-items: start;
+                    /* gap: 4px; */
+                    /* justify-content: space-between; */
                 }
             </style>
             <slot name="type"></slot>
             <com-list class="parameters">
                 <slot name="parameters"></slot>
             </com-list>
-            <com-list class="outs" part="outs">
+            <com-list class="outs" part="outs" row>
                 <slot name="outs"></slot>
             </com-list>
         </template>
@@ -138,7 +153,7 @@
             <style>
                 com-list {
                     border: none;
-                    justify-content: space-between;
+                    /* justify-content: space-between; */
                     align-items: center;
                     background-color: transparent;
                 }
@@ -166,6 +181,10 @@
                     flex-direction: row;
                     align-items: center;
                     gap: 0;
+                    flex-grow: 0;
+                    /* flex-grow: 1; */
+                    /* height: 3ch; */
+                    overflow: hidden;
 
                     font-size: 0.65rem;
                 }
@@ -174,6 +193,8 @@
                     font-size: 1em;
                 }
                 com-list {
+                    display: none;
+                    flex-grow: 0;
                     border: none;
                     gap: 2px;
                 }
@@ -181,7 +202,7 @@
 
             <span>&DownTeeArrow;</span>
 
-            <com-list>
+            <com-list part="out-list">
                 <com-periphial>CV</com-periphial>
                 <com-periphial>GT</com-periphial>
             </com-list>
@@ -194,10 +215,13 @@
                 :host {
                     flex-direction: row;
                     align-items: center;
+                    /* flex-grow: 0; */
                 }
                 com-list {
-                    padding: 0;
-                    align-items: center;
+                    /* flex-grow: 1; */
+                    /* display: none; */
+                    /* flex-grow: 0; */
+                    /* align-items: center; */
                 }
 
                 .type {
@@ -219,6 +243,7 @@
                 }
 
                 div {
+                    flex-grow: 1;
                     border-radius: 2px;
                     padding: 2px;
                     background-color: hsl(var(--color-white));
@@ -229,7 +254,7 @@
                 <slot></slot>
             </span>
 
-            <com-list row>
+            <com-list row part="p-list">
                 <div>
                     <label for="pid">pid</label>
                     :
@@ -245,7 +270,7 @@
                     </select>
                 </div>
 
-                <span>&boxV;</span>
+                <!-- <span>&boxV;</span> -->
 
                 <div>
                     <label for="ch">ch</label>

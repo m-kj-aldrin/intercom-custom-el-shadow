@@ -25,6 +25,17 @@ body {
     cursor: grab;
 }
 
+[data-show-outs] com-chain::part(p-list) {
+    display: flex;
+}
+
+[data-show-outs] com-out::part(out-list) {
+    display: flex;
+}
+[data-show-outs] com-module::part(outs) {
+    flex-direction: column;
+}
+
 /* TODO - ... this was intresting, maybe make this public? */
 
 [draggable]:hover:not(:has([draggable]:hover)) {

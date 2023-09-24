@@ -29,3 +29,14 @@ function actionClick(e) {
 }
 
 document.addEventListener("click", actionClick);
+
+/**@param {import("./drag").HTMLEvent<MouseEvent>} e */
+function hotKeys(e) {
+    switch (e.key) {
+        case "§":
+            document.documentElement.toggleAttribute("data-show-outs");
+            break;
+    }
+}
+
+document.addEventListener("keypress", hotKeys);

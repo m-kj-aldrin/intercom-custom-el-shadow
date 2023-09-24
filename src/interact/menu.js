@@ -1,4 +1,4 @@
-import { COMChain, COMModule, COMNetwork } from "../app.js";
+import { COMChain, COMModule, COMNetwork, COMOut } from "../app.js";
 
 /**
  *
@@ -8,13 +8,13 @@ function actionClick(e) {
     const meta = e.metaKey;
     const alt = e.altKey;
 
-    /**@type {COMChain | COMModule | COMNetwork | null} */
-    const target = e.target.closest("com-network,com-chain,com-module");
+    /**@type { COMNetwork | COMChain | COMModule | COMOut | null} */
+    const target = e.target.closest("com-network,com-chain,com-module,com-out");
 
     if (!target) return;
 
     if (alt && !(target instanceof COMNetwork)) {
-        target.remove();
+        target.remove(true);
     }
 
     if (meta) {

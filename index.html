@@ -17,14 +17,22 @@
                 :host {
                     display: flex;
                     flex-direction: column;
-                    gap: 2px;
+                    gap: 4px;
 
                     padding: 2px;
 
                     background-color: hsl(var(--color-white));
+                    --border-opacity: 0.05;
 
-                    border: 1px hsl(var(--color-black) / 0.1) solid;
+                    border: 1px hsl(var(--color-black) / var(--border-opacity))
+                        solid;
                     border-radius: 2px;
+
+                    --shadow-opacity: 0.02;
+                    --shadow: 0 0 8px 0
+                        hsl(var(--color-black) / var(--shadow-opacity));
+
+                    /* box-shadow: 0 0 8px 0 hsl(var(--color-black) / 0.03); */
                 }
             </style>
         </template>
@@ -46,9 +54,12 @@
             <style>
                 :host {
                     flex-grow: 1;
+                    padding: 4px;
                 }
                 com-list {
+                    /* overflow: hidden; */
                     flex-direction: row;
+                    gap: 4px;
                 }
             </style>
             <com-list>
@@ -61,8 +72,16 @@
         <template id="template-COM-CHAIN">
             <style>
                 :host {
+                    /* box-shadow: 0 0 8px 0
+                        hsl(var(--color-black) / var(--shadow-opacity)); */
+                    box-shadow: var(--shadow);
+
+                    /* overflow: visible auto; */
+                    /* padding-inline: 4px; */
                 }
                 com-list {
+                    padding: 4px;
+                    gap: 4px;
                     background-color: hsl(var(--color-primary) / 0.05);
                 }
             </style>
@@ -76,6 +95,24 @@
         <template id="template-COM-MODULE">
             <style>
                 :host {
+                    box-shadow: var(--shadow);
+                    position: relative;
+                    margin-bottom: 4px;
+                    --border-opacity: 0.1;
+                    padding: 4px;
+                }
+                :host::after {
+                    position: absolute;
+                    content: "";
+                    width: 100%;
+                    bottom: 0;
+                    left: 0;
+                    margin-bottom: -5.5px;
+                    /* margin-top: 17px; */
+                    /* padding-top: 4px; */
+                    /* height: 2px; */
+                    /* background-color: hsl(var(--color-black)); */
+                    border-bottom: 1px hsl(var(--color-black) / 0.1) dashed;
                 }
                 com-list.outs {
                     border: none;
@@ -133,6 +170,7 @@
                 :host {
                     flex-direction: row;
                     align-items: center;
+                    box-shadow: var(--shadow);
                 }
                 span {
                     min-width: 24px;

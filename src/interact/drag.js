@@ -89,8 +89,6 @@ function dragOver(selector, acceptList, e) {
 
     if (dragged instanceof COMOut && fromList == toList) return;
 
-    // console.log(children);
-
     const F = flip([
         ...children,
         dragged,

@@ -1,5 +1,6 @@
 import "./interact/menu.js";
 import { dragZone, draggable } from "./interact/drag.js";
+import flip from "./interact/flip.js";
 
 document.body.addEventListener("com:bus:context", (e) => {
     let signature = {};
@@ -22,6 +23,9 @@ export class Base extends HTMLElement {
         super();
 
         this.attachShadow({ mode: "open" });
+
+        this._init = false;
+        this._open_connection = true;
 
         /**@type {HTMLTemplateElement} */ // @ts-ignore
         const templateBase = document.getElementById(`template-BASE`);
@@ -56,10 +60,26 @@ export class Base extends HTMLElement {
         this.emitContext("connected");
     }
 
-    remove() {
+    disconnectedCallback() {
+        // this.emitContext("disconnected");
+    }
+
+    /**@param {boolean} should_flip */
+    remove(should_flip = false) {
         if (!this.parentElement) return this;
+
+        let F;
+        if (should_flip) {
+            const children = this.parentElement.children;
+            F = flip(children);
+        }
+
         this.emitContext("disconnected");
-        return this.parentElement.removeChild(this);
+
+        let r = this.parentElement.removeChild(this);
+        F?.play();
+
+        return r;
     }
 
     /**@param {"connected" | "disconnected" | "change"} type */
@@ -133,8 +153,6 @@ const MODULE_TYPES = {
 export class COMModule extends Base {
     constructor() {
         super();
-
-        this._init = false;
     }
 
     get signature() {
@@ -147,14 +165,24 @@ export class COMModule extends Base {
         };
     }
 
+    remove(should_flip) {
+        // TODO - is this needed? How does the OUTS reference the node they are attached to? Does the index needs to be updated?
+        // this.querySelectorAll("com-out").forEach((o) =>
+        //     o.emitContext("disconnected")
+        // );
+
+        return super.remove(should_flip);
+    }
+
     connectedCallback() {
         super.connectedCallback();
 
-        const sig = this.signature;
+        if (!this._init) {
+            const sig = this.signature;
 
-        const params = MODULE_TYPES[sig.type];
+            const params = MODULE_TYPES[sig.type];
 
-        const paramsHTML = `
+            const paramsHTML = `
         ${params
             ?.map((p, i) => {
                 return `
@@ -165,15 +193,15 @@ export class COMModule extends Base {
             .join("\n")}
         `;
 
-        if (!this._init) {
             this.innerHTML += `
             <span slot="type">${sig.type}</span>
             ${paramsHTML}
             `;
-            this._init = true;
 
             draggable(this);
             dragZone(this, "com-out", ["com-out"]);
+
+            this._init = true;
         }
     }
 }
@@ -197,6 +225,7 @@ export class COMParameter extends Base {
             this.innerHTML += `
             <span slot="name">${name}</span>
             `;
+
             this._init = true;
         }
     }
@@ -219,9 +248,16 @@ export class COMOut extends Base {
         });
     }
     connectedCallback() {
-        super.connectedCallback();
+        if (this._open_connection || this.hasAttribute("data-dragged")) {
+            super.connectedCallback();
+            this._open_connection = false;
+        }
 
-        draggable(this);
+        if (!this._init) {
+            draggable(this);
+
+            this._init = true;
+        }
     }
 }
 
@@ -243,8 +279,8 @@ document.body.innerHTML += `
             <com-out slot="outs" silent></com-out>
             <com-out slot="outs" silent></com-out>
         </com-module>
-            `.repeat(2)}
+            `.repeat(5)}
     </com-chain>
-        `.repeat(8)}
+        `.repeat(4)}
 </com-network>
 `;

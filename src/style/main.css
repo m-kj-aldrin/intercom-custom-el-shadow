@@ -36,6 +36,6 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-    background: hsl(var(--color-primary));
+    background: hsl(var(--color-primary) / 1);
     border-radius: 8px;
 }

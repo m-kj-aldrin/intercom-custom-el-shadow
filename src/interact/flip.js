@@ -19,6 +19,8 @@ export default function (elements) {
                 y: o.box.top - box.top,
             };
 
+            if (!posDifference.x && !posDifference.y) return;
+
             /**@type {Keyframe[]} */
             const keyFrames = [
                 {

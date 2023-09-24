@@ -17,20 +17,23 @@
                 :host {
                     display: flex;
                     flex-direction: column;
-                    gap: 4px;
 
+                    gap: 2px;
                     padding: 2px;
 
-                    background-color: hsl(var(--color-white));
-                    --border-opacity: 0.05;
+                    --bg-opacity: 0.3;
 
-                    border: 1px hsl(var(--color-black) / var(--border-opacity))
-                        solid;
+                    background-color: hsl(var(--color-white));
+                    color: hsl(var(--color));
+
+                    border: 1px hsl(var(--color) / var(--border-opacity)) solid;
                     border-radius: 2px;
 
-                    --shadow-opacity: 0.02;
-                    --shadow: 0 0 8px 0
-                        hsl(var(--color-black) / var(--shadow-opacity));
+                    box-shadow: var(--shadow);
+
+                    transition-property: background-color, gap, padding, color;
+                    transition-duration: 100ms;
+                    transition-timing-function: ease;
                 }
             </style>
         </template>
@@ -43,7 +46,9 @@
                     flex-grow: 1;
                     flex-direction: column;
 
-                    transition: background-color 100ms ease;
+                    background-color: hsl(
+                        var(--color-primary) / var(--bg-opacity)
+                    );
                 }
                 :host([row]) {
                     flex-direction: row;
@@ -58,10 +63,16 @@
             <style>
                 :host {
                     flex-grow: 1;
-                    padding: 4px;
-                }
-                com-list {
-                    gap: 4px;
+
+                    letter-spacing: 0.2ch;
+                    white-space: nowrap;
+
+                    --border-opacity: 0.3;
+                    --color: var(--color-black);
+
+                    --shadow-opacity: 0;
+                    --shadow: 0 0 8px 0
+                        hsl(var(--color) / var(--shadow-opacity));
                 }
             </style>
             <com-list row>
@@ -73,28 +84,21 @@
 
         <template id="template-COM-CHAIN">
             <style>
-                :host {
-                    box-shadow: var(--shadow);
-                }
-                com-list.modules {
-                    padding: 4px;
-                    gap: 4px;
-                    --bg-opacity: 0.1;
-                    background-color: hsl(
-                        var(--color-primary) / var(--bg-opacity)
-                    );
-                }
                 com-list.periphial {
                     flex-grow: 0;
-                    border: none;
                     justify-content: space-between;
                     align-items: center;
+                    font-size: 0.65rem;
+                }
+                span {
+                    font-family: monospace;
+                    font-size: 1rem;
                 }
             </style>
             <com-list class="periphial" row>
-                <com-periphial>cv</com-periphial>
+                <com-periphial>CV</com-periphial>
                 <span>&hookrightarrow;</span>
-                <com-periphial>gt</com-periphial>
+                <com-periphial>GT</com-periphial>
             </com-list>
             <com-list class="modules" part="modules">
                 <slot></slot>
@@ -106,19 +110,17 @@
         <template id="template-COM-MODULE">
             <style>
                 :host {
-                    box-shadow: var(--shadow);
-                    position: relative;
-                    --border-opacity: 0.1;
                     padding: 4px;
+                }
+
+                :host([type="PTH"]) .parameters,
+                :host(:not([type])) .parameters {
+                    display: none;
                 }
 
                 com-list.outs {
                     border: none;
                     flex-direction: row;
-                    --bg-opacity: 0.1;
-                    background-color: hsl(
-                        var(--color-primary) / var(--bg-opacity)
-                    );
                 }
             </style>
             <slot name="type"></slot>
@@ -134,23 +136,23 @@
 
         <template id="template-COM-PARAMETER">
             <style>
-                :host {
-                    border: none;
-                }
                 com-list {
                     border: none;
-                    flex-direction: row;
                     justify-content: space-between;
+                    align-items: center;
+                    background-color: transparent;
                 }
                 ::slotted(input) {
                     color: currentColor;
                     background-color: hsl(var(--color-white));
                     border: none;
+                    padding: 2px;
                     border-bottom: 1px currentColor solid;
                     width: 6ch;
+                    cursor: text !important;
                 }
             </style>
-            <com-list>
+            <com-list row>
                 <slot name="name"></slot>
                 <slot></slot>
             </com-list>
@@ -163,8 +165,9 @@
                 :host {
                     flex-direction: row;
                     align-items: center;
-                    box-shadow: var(--shadow);
                     gap: 0;
+
+                    font-size: 0.65rem;
                 }
                 span {
                     padding-inline: 0.5ch;
@@ -174,23 +177,13 @@
                     border: none;
                     gap: 2px;
                 }
-                select {
-                    color: currentColor;
-                    font-size: 0.5em;
-                    appearance: none;
-                    border: none;
-                    border-radius: 0;
-                    border-bottom: 1px currentColor solid;
-                    background-color: hsl(var(--color-white));
-                    width: max-content;
-                }
             </style>
 
             <span>&DownTeeArrow;</span>
 
             <com-list>
-                <com-periphial> cv </com-periphial>
-                <com-periphial> gt </com-periphial>
+                <com-periphial>CV</com-periphial>
+                <com-periphial>GT</com-periphial>
             </com-list>
         </template>
 
@@ -200,59 +193,74 @@
             <style>
                 :host {
                     flex-direction: row;
-                    font-size: 0.5rem;
                     align-items: center;
                 }
                 com-list {
-                    border: none;
+                    padding: 0;
                     align-items: center;
                 }
-                label,
+
+                .type {
+                    padding-inline: 2px;
+                }
+
                 select {
                     cursor: pointer;
-                }
-                select {
-                    min-width: 2ch;
+                    min-width: 2.5ch;
                     font-size: 1em;
                     font-family: inherit;
                     color: currentColor;
                     appearance: none;
                     border: none;
-                    border-radius: 0;
                     border-bottom: 1px currentColor solid;
-                    background-color: hsl(var(--color-white));
+                    border-radius: 0;
                     width: max-content;
+                    background-color: transparent;
+                }
+
+                div {
+                    border-radius: 2px;
+                    padding: 2px;
+                    background-color: hsl(var(--color-white));
                 }
             </style>
 
-            <slot></slot>
+            <span class="type">
+                <slot></slot>
+            </span>
 
             <com-list row>
-                <label for="pid">pid</label>
-                <select id="pid" name="pid">
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                    <option value="6">6</option>
-                    <option value="7">7</option>
-                    <option value="8">8</option>
-                </select>
+                <div>
+                    <label for="pid">pid</label>
+                    :
+                    <select id="pid" name="pid">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                    </select>
+                </div>
 
-                <span>:</span>
+                <span>&boxV;</span>
 
-                <label for="ch">ch</label>
-                <select id="ch" name="ch">
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                    <option value="6">6</option>
-                    <option value="7">7</option>
-                    <option value="8">8</option>
-                </select>
+                <div>
+                    <label for="ch">ch</label>
+                    :
+                    <select id="ch" name="ch">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                    </select>
+                </div>
             </com-list>
         </template>
     </body>

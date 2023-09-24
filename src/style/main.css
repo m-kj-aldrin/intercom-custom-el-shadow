@@ -18,25 +18,35 @@ body {
 }
 
 [data-dragged] {
-    color: hsl(var(--color-offset));
+    --color: var(--color-offset);
 }
 
 [draggable] {
     cursor: grab;
 }
 
-html[data-dragging].COM-MODULE com-chain::part(modules) {
-    --bg-opacity: 0.3;
+/* TODO - ... this was intresting, maybe make this public? */
+
+[draggable]:hover:not(:has([draggable]:hover)) {
+    --border-opacity: 0.75;
+    --color: var(--color-offset);
 }
+
+html[data-dragging].COM-MODULE com-chain::part(modules) {
+    --bg-opacity: 1;
+    gap: 6px;
+}
+
 html[data-dragging].COM-OUT com-module::part(outs) {
-    --bg-opacity: 0.5;
+    --bg-opacity: 1;
+    padding-block: 4px;
 }
 
 :root {
     --color-black: 0 0% 5%;
     --color-white: 0 0% 97.5%;
 
-    --color-primary: 45 90% 70%;
+    --color-primary: 55 100% 75%;
     --color-offset: 195 75% 45%;
 }
 

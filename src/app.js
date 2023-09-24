@@ -68,16 +68,18 @@ export class Base extends HTMLElement {
     remove(should_flip = false) {
         if (!this.parentElement) return this;
 
-        let F;
-        if (should_flip) {
-            const children = this.parentElement.children;
-            F = flip(children);
-        }
+        // TODO - Should the FLIP animation be handle inside the remove method? This seems to tight ...
+
+        // let F;
+        // if (should_flip) {
+        //     const children = this.parentElement.children;
+        //     F = flip(children);
+        // }
 
         this.emitContext("disconnected");
 
         let r = this.parentElement.removeChild(this);
-        F?.play();
+        // F?.play();
 
         return r;
     }
@@ -144,31 +146,34 @@ export class COMChain extends Base {
 }
 
 const MODULE_TYPES = {
+    PTH: [],
     LFO: [
         { name: "AMP", value: 0.5 },
         { name: "FREQ", value: 0.125 },
     ],
 };
 
+/**@typedef {keyof typeof MODULE_TYPES} ModuleTypes */
+
 export class COMModule extends Base {
     /**
-     * @param {string} type
+     * @param {ModuleTypes} type
      * @returns {string} HTMLString <com-paramter>...</com-parameter>
      */
     static buildParametersString(type) {
         const params = MODULE_TYPES[type];
 
-        const paramsHTMLString = `
+        let paramsHTMLString = "";
 
-        ${params
-            ?.map((p, i) => {
-                return `
-            <com-parameter slot="parameters" data-index="${i}" name="${p.name}" >
-                <input value="${p.value}" draggable="true" ondragstart="event.preventDefault()"/>
-            </com-parameter>`;
-            })
-            .join("\n")}
-        `;
+        for (let i = 0; i < params?.length; i++) {
+            const param = params[i];
+
+            paramsHTMLString += `
+            <com-parameter slot="parameters" data-index="${i}" name="${param.name}" >
+                <input value="${param.value}" draggable="true" ondragstart="event.preventDefault()"/>
+            </com-parameter>
+            `;
+        }
 
         return paramsHTMLString;
     }
@@ -259,6 +264,7 @@ export class COMOut extends Base {
         });
     }
     connectedCallback() {
+        // TODO -- Is this nessecary? Should the outs signal to intercom everytime the module they are attached to move?
         if (this._open_connection || this.hasAttribute("data-dragged")) {
             super.connectedCallback();
             this._open_connection = false;
@@ -272,12 +278,23 @@ export class COMOut extends Base {
     }
 }
 
+export class COMPeriphial extends Base {
+    constructor() {
+        super();
+
+        this.shadowRoot.addEventListener("input", (e) => {
+            console.log(e);
+        });
+    }
+}
+
 customElements.define("com-network", COMNetwork);
 customElements.define("com-list", COMList);
 customElements.define("com-chain", COMChain);
 customElements.define("com-module", COMModule);
 customElements.define("com-parameter", COMParameter);
 customElements.define("com-out", COMOut);
+customElements.define("com-periphial", COMPeriphial);
 
 document.body.innerHTML += `
 <com-network silent>
@@ -290,8 +307,8 @@ document.body.innerHTML += `
             <com-out slot="outs" silent></com-out>
             <com-out slot="outs" silent></com-out>
         </com-module>
-            `.repeat(5)}
+            `.repeat(1)}
     </com-chain>
-        `.repeat(4)}
+        `.repeat(2)}
 </com-network>
 `;

@@ -31,8 +31,6 @@
                     --shadow-opacity: 0.02;
                     --shadow: 0 0 8px 0
                         hsl(var(--color-black) / var(--shadow-opacity));
-
-                    /* box-shadow: 0 0 8px 0 hsl(var(--color-black) / 0.03); */
                 }
             </style>
         </template>
@@ -43,6 +41,10 @@
             <style>
                 :host {
                     flex-grow: 1;
+                    flex-direction: column;
+                }
+                :host([row]) {
+                    flex-direction: row;
                 }
             </style>
             <slot></slot>
@@ -57,7 +59,6 @@
                     padding: 4px;
                 }
                 com-list {
-                    /* overflow: hidden; */
                     flex-direction: row;
                     gap: 4px;
                 }
@@ -72,20 +73,24 @@
         <template id="template-COM-CHAIN">
             <style>
                 :host {
-                    /* box-shadow: 0 0 8px 0
-                        hsl(var(--color-black) / var(--shadow-opacity)); */
                     box-shadow: var(--shadow);
-
-                    /* overflow: visible auto; */
-                    /* padding-inline: 4px; */
                 }
-                com-list {
+                com-list.modules {
                     padding: 4px;
                     gap: 4px;
                     background-color: hsl(var(--color-primary) / 0.05);
                 }
+                com-list.periphial {
+                    flex-grow: 0;
+                    flex-direction: row;
+                    border: none;
+                }
             </style>
-            <com-list>
+            <com-list class="periphial">
+                <com-periphial></com-periphial>
+                <com-periphial></com-periphial>
+            </com-list>
+            <com-list class="modules">
                 <slot></slot>
             </com-list>
         </template>
@@ -108,10 +113,6 @@
                     bottom: 0;
                     left: 0;
                     margin-bottom: -5.5px;
-                    /* margin-top: 17px; */
-                    /* padding-top: 4px; */
-                    /* height: 2px; */
-                    /* background-color: hsl(var(--color-black)); */
                     border-bottom: 1px hsl(var(--color-black) / 0.1) dashed;
                 }
                 com-list.outs {
@@ -190,7 +191,6 @@
                 select {
                     color: currentColor;
                     font-size: 0.5em;
-                    /* font-size: inherit; */
                     appearance: none;
                     border: none;
                     border-radius: 0;
@@ -202,7 +202,7 @@
 
             <span>&DownTeeArrow;</span>
 
-            <com-list>
+            <com-list row>
                 <select name="pid">
                     <option value="0">0</option>
                     <option value="1">1</option>
@@ -226,16 +226,27 @@
             </com-list>
         </template>
 
-        <!-- <com-network>
-            <com-chain>
-                <com-module type="LFO"></com-module>
-                <com-module type="CHA"></com-module>
-                <com-module>
-                    <com-out slot="outs"></com-out>
-                    <com-out slot="outs"></com-out>
-                </com-module>
-            </com-chain>
-            <com-chain></com-chain>
-        </com-network> -->
+        <!-- - - PERIPHIAL -->
+
+        <template id="template-COM-PERIPHIAL">
+            <style>
+                com-list {
+                    border: none;
+                }
+            </style>
+            <com-list row>
+                <select name="pid">
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                </select>
+                <select name=""></select>
+            </com-list>
+        </template>
     </body>
 </html>

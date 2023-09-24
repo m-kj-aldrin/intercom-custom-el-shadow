@@ -151,6 +151,7 @@ const MODULE_TYPES = {
         { name: "AMP", value: 0.5 },
         { name: "FREQ", value: 0.125 },
     ],
+    CHA: [{ name: "CHNS", value: 0.5 }],
 };
 
 /**@typedef {keyof typeof MODULE_TYPES} ModuleTypes */

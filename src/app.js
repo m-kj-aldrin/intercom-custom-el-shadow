@@ -151,6 +151,28 @@ const MODULE_TYPES = {
 };
 
 export class COMModule extends Base {
+    /**
+     * @param {string} type
+     * @returns {string} HTMLString <com-paramter>...</com-parameter>
+     */
+    static buildParametersString(type) {
+        const params = MODULE_TYPES[type];
+
+        const paramsHTMLString = `
+
+        ${params
+            ?.map((p, i) => {
+                return `
+            <com-parameter slot="parameters" data-index="${i}" name="${p.name}" >
+                <input value="${p.value}" draggable="true" ondragstart="event.preventDefault()"/>
+            </com-parameter>`;
+            })
+            .join("\n")}
+        `;
+
+        return paramsHTMLString;
+    }
+
     constructor() {
         super();
     }
@@ -180,18 +202,7 @@ export class COMModule extends Base {
         if (!this._init) {
             const sig = this.signature;
 
-            const params = MODULE_TYPES[sig.type];
-
-            const paramsHTML = `
-        ${params
-            ?.map((p, i) => {
-                return `
-            <com-parameter slot="parameters" data-index="${i}" name="${p.name}" >
-                <input value="${p.value}" draggable="true" ondragstart="event.preventDefault()"/>
-            </com-parameter>`;
-            })
-            .join("\n")}
-        `;
+            const paramsHTML = COMModule.buildParametersString(sig.type);
 
             this.innerHTML += `
             <span slot="type">${sig.type}</span>

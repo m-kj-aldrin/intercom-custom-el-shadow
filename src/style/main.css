@@ -22,6 +22,17 @@ body {
     color: hsl(var(--color-offset));
 }
 
+[draggable] {
+    cursor: grab;
+}
+
+html[data-dragging].COM-MODULE com-chain::part(modules) {
+    --bg-opacity: 0.3;
+}
+html[data-dragging].COM-OUT com-module::part(outs) {
+    --bg-opacity: 0.3;
+}
+
 :root {
     --color-primary: 50 100% 50%;
     --color-offset: 210 70% 50%;

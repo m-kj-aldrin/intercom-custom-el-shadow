@@ -279,12 +279,38 @@ export class COMOut extends Base {
 }
 
 export class COMPeriphial extends Base {
+    /**
+     * @param {number} pid
+     * @returns {number}
+     */
+    static pidToCh(pid) {
+        return [8, 8, 8, 8, 8, 4, 12, 16]?.[pid] ?? 0;
+    }
     constructor() {
         super();
 
-        this.shadowRoot.addEventListener("input", (e) => {
-            console.log(e);
-        });
+        this.shadowRoot.addEventListener(
+            "input",
+            /**@param {InputEvent & {target:HTMLInputElement}} e */
+            (e) => {
+                // PID determine number of channels, midi = 16, cv = 8 and so on
+                if (e.target.getAttribute("name") != "pid") return;
+
+                const { value } = e.target;
+
+                const nChannels = COMPeriphial.pidToCh(+value - 1);
+
+                let selectHTMLString = "";
+                for (let i = 0; i < nChannels; i++) {
+                    selectHTMLString += `<option value="${i}">${
+                        i + 1
+                    }</option>`;
+                }
+
+                this.shadowRoot.querySelector("select[name='ch']").innerHTML =
+                    selectHTMLString;
+            }
+        );
     }
 }
 

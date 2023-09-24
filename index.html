@@ -59,11 +59,10 @@
                     padding: 4px;
                 }
                 com-list {
-                    flex-direction: row;
                     gap: 4px;
                 }
             </style>
-            <com-list>
+            <com-list row>
                 <slot></slot>
             </com-list>
         </template>
@@ -78,19 +77,21 @@
                 com-list.modules {
                     padding: 4px;
                     gap: 4px;
-                    background-color: hsl(var(--color-primary) / 0.05);
+                    --bg-opacity: 0.05;
+                    background-color: hsl(
+                        var(--color-primary) / var(--bg-opacity)
+                    );
                 }
                 com-list.periphial {
                     flex-grow: 0;
-                    flex-direction: row;
                     border: none;
                 }
             </style>
-            <com-list class="periphial">
+            <com-list class="periphial" row>
                 <com-periphial></com-periphial>
                 <com-periphial></com-periphial>
             </com-list>
-            <com-list class="modules">
+            <com-list class="modules" part="modules">
                 <slot></slot>
             </com-list>
         </template>
@@ -118,22 +119,25 @@
                 com-list.outs {
                     border: none;
                     flex-direction: row;
-                    background-color: hsl(var(--color-primary) / 0.05);
-                    padding: 0;
-                    gap: 0;
+                    --bg-opacity: 0.05;
+                    background-color: hsl(
+                        var(--color-primary) / var(--bg-opacity)
+                    );
+                    /* padding: 0; */
+                    /* gap: 0; */
                 }
                 com-list.parameters {
-                    padding: 0;
+                    /* padding: 0; */
                 }
                 ::slotted(com-out) {
-                    margin: 2px;
+                    /* margin: 2px; */
                 }
             </style>
             <slot name="type"></slot>
             <com-list class="parameters">
                 <slot name="parameters"></slot>
             </com-list>
-            <com-list class="outs">
+            <com-list class="outs" part="outs">
                 <slot name="outs"></slot>
             </com-list>
         </template>
@@ -233,10 +237,22 @@
                 com-list {
                     border: none;
                 }
+                select {
+                    cursor: pointer;
+                    /* min-width: 7ch; */
+                    color: currentColor;
+                    font-size: 0.5em;
+                    appearance: none;
+                    border: none;
+                    border-radius: 0;
+                    border-bottom: 1px currentColor solid;
+                    background-color: hsl(var(--color-white));
+                    width: max-content;
+                }
             </style>
+
             <com-list row>
                 <select name="pid">
-                    <option value="0">0</option>
                     <option value="1">1</option>
                     <option value="2">2</option>
                     <option value="3">3</option>
@@ -244,8 +260,18 @@
                     <option value="5">5</option>
                     <option value="6">6</option>
                     <option value="7">7</option>
+                    <option value="8">8</option>
                 </select>
-                <select name=""></select>
+                <select name="ch">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                </select>
             </com-list>
         </template>
     </body>
